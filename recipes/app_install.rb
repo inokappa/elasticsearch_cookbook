@@ -15,7 +15,6 @@ end
 
 service "elasticsearch" do
   supports :status => true, :restart => true, :start => true
-  action :start
 end
 
 execute "install_elasticsearch_head" do
