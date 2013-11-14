@@ -1,5 +1,5 @@
 package "openjdk-6-jdk" do
-  action: install
+  action :install
 end
 
 execute "install_elasticsearch" do
@@ -19,7 +19,7 @@ service "elasticsearch" do
 end
 
 execute "install_elasticsearch_head" do
-  command "/usr/share/elasticsearch/bin/plugin install -install mobz/elasticsearch-head"
+  command "/usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head"
   not_if {File.exists?("/usr/share/elasticsearch/plugins/head")}
   notifies :restart, resources(:service => "elasticsearch")
 end
