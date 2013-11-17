@@ -1,0 +1,23 @@
+<source>
+  type tail
+  path /tmp/test_log
+  pos_file /tmp/test.pos
+  tag siege.access
+  format /^(?<date>(\d{4})-(\d{2})-(\d{2}) (\d{2}:)(\d{2}):(\d{2})),\s{1,}(?<Trans>\d+(\.\d+)?),\s{1,}(?<Elap_Time>\d+(\.\d+)?),\s{1,}(?<Data_Trans>\d+(\.\d+)?),\s{1,}(?<Resp_Time>\d+(\.\d+)?),\s{1,}(?<Trans_Rate>\d+(\.\d+)?),\s{1,}(?<Throughput>\d+(\.\d+)?),\s{1,}(?<Concurrent>\d+(\.\d+)?),\s{1,}(?<OKAY>\d+),\s{1,}(?<Failed>\d+)$/
+</source>
+
+<match siege.access>
+  type typecast
+  item_types Trans:integer,Elap_Time:float,Data_Trans:integer,Resp_Time:float,Trans_Rate:float,Throughput:float,Concurrent:float,OKAY:integer,Failed:integer
+  tag filtered.siege.access
+</match>
+
+<match filtered.siege.access>
+  type elasticsearch
+  include_tag_key true
+  tag_key @log_name
+  host 127.0.0.1
+  port 9200
+  logstash_format true
+  flush_interval 10s
+</match>
