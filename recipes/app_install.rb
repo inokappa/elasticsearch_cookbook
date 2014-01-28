@@ -1,4 +1,4 @@
-%w{openjdk-6-jdk libyaml-dev}.each do |pkgs|
+%w{openjdk-6-jdk libyaml-dev libxslt1-dev}.each do |pkgs|
   package pkgs do
     action :install
   end
@@ -31,7 +31,7 @@ execute "install_libssl" do
 end
 
 remote_file "/tmp/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb" do
-  source "wget http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb"
+  source "http://ftp.us.debian.org/debian/pool/main/o/openssl/libssl0.9.8_0.9.8o-4squeeze14_amd64.deb"
   notifies :run, "execute[install_libssl]", :immediately
   not_if {File.exists?("/usr/lib/libssl.so.0.9.8")}
 end
@@ -43,14 +43,15 @@ end
 
 remote_file "/tmp/td-agent_1.1.17-1_amd64.deb" do
   source "http://packages.treasure-data.com/debian/pool/contrib/t/td-agent/td-agent_1.1.17-1_amd64.deb"
-  notifies :run, "execute[install_elasticsearch]", :immediately
-  not_if {File.exists?("/usr/lib/fluent")}
+  notifies :run, "execute[install_td-agent]", :immediately
+  not_if {File.exists?("/usr/lib/fluent/ruby/bin/gem")}
 end
 
 %w{fluent-plugin-elasticsearch fluent-plugin-typecast}.each do |gems|
   gem_package gems do
     gem_binary("/usr/lib/fluent/ruby/bin/gem")
     options("--no-ri --no-rdoc") 
+    only_if {File.exists?("/usr/lib/fluent/ruby/bin/gem")}
   end
 end
 
