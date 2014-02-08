@@ -27,6 +27,18 @@ end
 
 execute "install_elasticsearch_marvel" do
   command "/usr/share/elasticsearch/bin/plugin -install elasticsearch/marvel/latest"
-  not_if {File.exists?("/usr/share/elasticsearch/marvel")}
+  not_if {File.exists?("/usr/share/elasticsearch/plugins/marvel")}
+  notifies :restart, resources(:service => "elasticsearch")
+end
+
+execute "install_elasticsearch_HQ" do
+  command "/usr/share/elasticsearch/bin/plugin -install royrusso/elasticsearch-HQ"
+  not_if {File.exists?("/usr/share/elasticsearch/plugins/HQ")}
+  notifies :restart, resources(:service => "elasticsearch")
+end
+
+execute "install_elasticsearch_kuromoji" do
+  command "/usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-analysis-kuromoji/2.0.0.RC1"
+  not_if {File.exists?("/usr/share/elasticsearch/plugins/analysis-kuromoji")}
   notifies :restart, resources(:service => "elasticsearch")
 end
