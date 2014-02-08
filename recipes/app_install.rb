@@ -42,3 +42,9 @@ execute "install_elasticsearch_kuromoji" do
   not_if {File.exists?("/usr/share/elasticsearch/plugins/analysis-kuromoji")}
   notifies :restart, resources(:service => "elasticsearch")
 end
+
+execute "install_elasticsearch_cloud_aws" do
+  command "/usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.0.0.RC1"
+  not_if {File.exists?("/usr/share/elasticsearch/plugins/cloud-aws")}
+  notifies :restart, resources(:service => "elasticsearch")
+end

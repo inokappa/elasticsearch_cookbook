@@ -18,6 +18,6 @@ describe process('java') do
   its(:args) { should match /elasticsearch/ }
 end
 
-describe command('/usr/share/elasticsearch/bin/plugin -l | egrep \'head|marvel|HQ|kuromoji\'') do
+describe command('/usr/share/elasticsearch/bin/plugin -l | egrep \'head|marvel|HQ|kuromoji|cloud-aws\'') do
   it { should return_exit_status 0 }
 end
